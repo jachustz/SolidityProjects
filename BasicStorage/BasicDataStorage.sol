@@ -19,7 +19,7 @@ contract BasicDataStorage {
         return favoriteNumber;
     }
 
-    function addPerson(
+    function addTransmittal(
         string memory _project,
         uint256 _drawingNumber,
         uint256 _date

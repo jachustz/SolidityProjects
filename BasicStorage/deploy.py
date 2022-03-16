@@ -36,8 +36,8 @@ abi = compiledCode["contracts"]["BasicDataStorage.sol"]["BasicDataStorage"]["abi
 
 w3 = Web3(Web3.HTTPProvider("HTTP://127.0.0.1:7545"))
 chain_id = 1337
-my_address = "0xF2DCCED22EEb74b306D601e1479758Ac3066f8Ff"
-private_key = "0x293ee3baec1a5dabf689f6b4806bb92a447b291cb2af5ad03bc1b82123e26e61"
+my_address = "0xF2DCCED22EEb74b306D601e1479758Ac3066f8Ff"  # ganache public key
+private_key = "0x293ee3baec1a5dabf689f6b4806bb92a447b291cb2af5ad03bc1b82123e26e61"  # ganache private key
 
 # create contract
 basicDataStorageContract = w3.eth.contract(abi=abi, bytecode=bytecode)
