@@ -1,6 +1,11 @@
 from solcx import compile_standard, install_solc
 import json
 from web3 import Web3
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 # read/open contract code
 with open("./BasicDataStorage.sol", "r") as file:
@@ -34,14 +39,16 @@ bytecode = compiledCode["contracts"]["BasicDataStorage.sol"]["BasicDataStorage"]
 abi = compiledCode["contracts"]["BasicDataStorage.sol"]["BasicDataStorage"]["abi"]
 
 
-w3 = Web3(Web3.HTTPProvider("HTTP://127.0.0.1:7545"))
-chain_id = 1337
-my_address = "0xF2DCCED22EEb74b306D601e1479758Ac3066f8Ff"  # ganache public key
-private_key = "0x293ee3baec1a5dabf689f6b4806bb92a447b291cb2af5ad03bc1b82123e26e61"  # ganache private key
+w3 = Web3(
+    Web3.HTTPProvider("https://rinkeby.infura.io/v3/68c0eea9aac94b61b9928ae4ad714add")
+)
+chain_id = 4  # Rinkeby/4
+my_address = os.getenv("envWalletAddress")  # ganache public key
+private_key = os.getenv("envPrivateKey")  # ganache private key
 nonce = w3.eth.getTransactionCount(my_address)
 
 storageContract = w3.eth.contract(
-    address="0x4279F4340825F29ECa26D19Bc63Bbb827951CB40", abi=abi
+    address=w3.toChecksumAddress("0xe78a0f7e598cc8b0bb87894b0f60dd2a88d6a8ab"), abi=abi
 )
 
 
