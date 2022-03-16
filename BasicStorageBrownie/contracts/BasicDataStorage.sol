@@ -11,7 +11,8 @@ contract BasicDataStorage {
         uint256 date;
     }
 
-    Transmittal[] public people;
+    Transmittal[] public transmittals;
+
     mapping(string => uint256) public projectToDrawingNumber;
 
     function retrieve() public view returns (uint256) {
@@ -26,7 +27,12 @@ contract BasicDataStorage {
         require(bytes(_project).length > 0);
         require(_drawingNumber > 0);
         require(_date > 0);
-        people.push(Transmittal(_project, _drawingNumber, _date));
+        transmittals.push(Transmittal(_project, _drawingNumber, _date));
         projectToDrawingNumber[_project] = _drawingNumber;
+    }
+
+    function getFirstItem() public view returns (uint256) {
+        Transmittal memory transmittal = transmittals[0];
+        return transmittal.drawingNumber;
     }
 }
