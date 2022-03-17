@@ -43,8 +43,8 @@ w3 = Web3(
     Web3.HTTPProvider("https://rinkeby.infura.io/v3/68c0eea9aac94b61b9928ae4ad714add")
 )
 chain_id = 4  # Rinkeby/4
-my_address = os.getenv("envWalletAddress")  # ganache public key
-private_key = os.getenv("envPrivateKey")  # ganache private key
+my_address = os.getenv("devWalletAddress")  # ganache public key
+private_key = os.getenv("devPrivateKey")  # ganache private key
 nonce = w3.eth.getTransactionCount(my_address)
 
 storageContract = w3.eth.contract(
