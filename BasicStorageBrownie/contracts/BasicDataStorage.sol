@@ -19,6 +19,10 @@ contract BasicDataStorage {
         return favoriteNumber;
     }
 
+    function store(uint256 _favoriteNumber) public {
+        favoriteNumber = _favoriteNumber;
+    }
+
     function addTransmittal(
         string memory _project,
         uint256 _drawingNumber,
@@ -29,10 +33,5 @@ contract BasicDataStorage {
         require(_date > 0);
         transmittals.push(Transmittal(_project, _drawingNumber, _date));
         projectToDrawingNumber[_project] = _drawingNumber;
-    }
-
-    function getFirstItem() public view returns (uint256) {
-        Transmittal memory transmittal = transmittals[0];
-        return transmittal.drawingNumber;
     }
 }
