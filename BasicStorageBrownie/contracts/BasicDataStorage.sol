@@ -19,7 +19,7 @@ contract BasicDataStorage {
         return favoriteNumber;
     }
 
-    function store(uint256 _favoriteNumber) public {
+    function update(uint256 _favoriteNumber) public {
         favoriteNumber = _favoriteNumber;
     }
 

@@ -12,7 +12,7 @@ def deployBasicDataStorage():
     print(favoriteNumber)
 
     # create txn to update to 99
-    transaction = basicStorage.store(99, {"from": account})
+    transaction = basicStorage.update(99, {"from": account})
     transaction.wait(1)  # wait 1 block
 
     # call retrieve to ensure it was check if it was updated correctly
