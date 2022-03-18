@@ -5,7 +5,7 @@ def deployBasicDataStorage():
     account = get_account()
 
     # deply
-    basicStorage = BasicDataStorage.deploy({"from": account})
+    basicStorage = BasicDataStorage.deploy({"from": account}, publish_source=True)
 
     # call retrieve to make sure it inits to 0
     favoriteNumber = basicStorage.retrieve()
