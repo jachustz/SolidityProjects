@@ -17,15 +17,20 @@ contract FundMe {
     mapping(address => uint256) public addressToAmountFunded;
 
     // array of deposit wallets
-    address[] public funders;
+    address[] public _funders;
 
     //addresses of who can claim
-    address[] public claimers;
+    address[] public _claimers;
+
+    //ChainLink Price feed
+    AggregatorV3Interface public _priceFeed;
 
     //add the publisher and another wallet to the claimers list
-    constructor() public {
-        claimers.push(msg.sender);
-        claimers.push(0xA528F58D716dC9a03487d7EEA1DBbD4a52AF4a23);
+    constructor(address priceFeed) public {
+        _priceFeed = AggregatorV3Interface(priceFeed);
+        _claimers.push(msg.sender);
+        //hard coded wallet to test mutliple allowed claimers
+        _claimers.push(0xA528F58D716dC9a03487d7EEA1DBbD4a52AF4a23);
     }
 
     function fund() public payable {
@@ -40,16 +45,18 @@ contract FundMe {
 
         //if not upsert amount to funders array
         addressToAmountFunded[msg.sender] += msg.value;
-        funders.push(msg.sender);
+        _funders.push(msg.sender);
     }
 
     function getPrice() public view returns (uint256) {
-        AggregatorV3Interface priceFeed = AggregatorV3Interface(
-            0x8A753747A1Fa494EC906cE90E9f37563A8AF630e
-        );
-        (, int256 answer, , , ) = priceFeed.latestRoundData();
-        // ETH/USD rate in 18 digit
+        (, int256 answer, , , ) = _priceFeed.latestRoundData();
+        //ETH/USD rate in 18 digit
         return uint256(answer * 10000000000);
+    }
+
+    //gets the version of the chainlink pricefeed
+    function getVersion() public view returns (uint256) {
+        return _priceFeed.version();
     }
 
     function getConversionRate(uint256 ethAmount)
@@ -63,12 +70,11 @@ contract FundMe {
         return ethAmountInUsd;
     }
 
-    //modifier: https://medium.com/coinmonks/solidity-tutorial-all-about-modifiers-a86cf81c14cb
     modifier isClaimer() {
         bool isClaimer = false;
         //is the message sender one of the claimers
-        for (uint256 i = 0; i < claimers.length; i++) {
-            if (msg.sender == claimers[i]) {
+        for (uint256 i = 0; i < _claimers.length; i++) {
+            if (msg.sender == _claimers[i]) {
                 isClaimer = true;
             }
         }
@@ -77,22 +83,20 @@ contract FundMe {
         _;
     }
 
-    // isClaimer modifer will first check the condition inside it
-    // and
-    // if true, withdraw function will be executed
+    //must pass the isClaimer check to execute
     function withdraw() public payable isClaimer {
         msg.sender.transfer(address(this).balance);
 
         //iterate through all the funders to make them 0 since the contract is empty
         for (
             uint256 funderIndex = 0;
-            funderIndex < funders.length;
+            funderIndex < _funders.length;
             funderIndex++
         ) {
-            address funder = funders[funderIndex];
+            address funder = _funders[funderIndex];
             addressToAmountFunded[funder] = 0;
         }
         //funders array will be initialized to 0
-        funders = new address[](0);
+        _funders = new address[](0);
     }
 }
