@@ -1,0 +1,6 @@
+{
+    "solidity.remappings": [
+        "@chainlink/contracts/src/v0.6/interfaces/AggregatorV3Interface.sol",
+        "@chainlink/contracts/src/v0.6/vendor/SafeMathChainlink.sol"
+    ]
+  }
