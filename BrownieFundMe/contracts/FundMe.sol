@@ -7,7 +7,6 @@ pragma solidity ^0.6.0;
 
 // Get ETH to USD from Chainlink
 import "@chainlink/contracts/src/v0.6/interfaces/AggregatorV3Interface.sol";
-import "@chainlink/contracts/src/v0.6/vendor/SafeMathChainlink.sol";
 
 contract FundMe {
     // safemath to check for int overflows
