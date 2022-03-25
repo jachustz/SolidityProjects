@@ -21,6 +21,7 @@ contract Lottery is VRFConsumerBase, Ownable {
         InProcess
     }
     LotteryState public _lotteryState;
+    event RequestedRandomness(bytes32 requestId);
 
     constructor(
         address priceFeedAddress,
@@ -64,7 +65,8 @@ contract Lottery is VRFConsumerBase, Ownable {
             "Can't close a lottery until one is started"
         );
         _lotteryState = LotteryState.InProcess;
-        requestRandomness(_keyHash, _fee);
+        bytes32 requestId = requestRandomness(_keyHash, _fee);
+        emit RequestedRandomness(requestId);
     }
 
     function fulfillRandomness(bytes32 requestID, uint256 randomness)

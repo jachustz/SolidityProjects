@@ -15,14 +15,17 @@ _ethPrice = 200000000000
 _ethPrecision = 8
 
 
-def getAccount():
+def getAccount(index=None, id=None):
+    if index:
+        return accounts[index]
+    if id:
+        return accounts.load(id)
     if (
         network.show_active() in _localBlockChainEnvironments
         or network.show_active() in _forkedLocalEnvironments
     ):
         return accounts[0]
-    else:
-        return accounts.add(config["wallets"]["devPrivateKey"])
+    return accounts.add(config["wallets"]["devPrivateKey"])
 
 
 contractToMock = {
@@ -60,3 +63,14 @@ def deployMocks():
         VRFCoordinatorMock.deploy(linkTokenContract.address, {"from": account})
 
     print(f"Mocks Deployed Successfully")
+
+
+def fund_with_link(
+    contractAddress, account=None, linkToken=None, amount=100000000000000000
+):
+    account = account if account else getAccount()
+    linkToken = linkToken if linkToken else getContract("linkToken")
+    txn = linkToken.transfer(contractAddress, amount, {"from": account})
+    txn.wait(1)
+    print("Funded Contract")
+    return txn
